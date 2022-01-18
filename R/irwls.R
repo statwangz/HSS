@@ -48,7 +48,7 @@ irwls <- function(y, L2, update_x, weights, intercept = 1,
   }
 
 
-  # Perfrom analysis
+  # Perform analysis
   n_blocks <- length(seperator) - 1
   n_snps <- length(y)
   p <- ncol(wLD)
