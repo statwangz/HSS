@@ -48,7 +48,7 @@ est_para <- function(dat, M,
 
     # step 2
     seperator_new <- idx_step1[seperator]
-    step2 <- irwls(CHI2, L2, update_x = L2, weights, intercept = step1$intercept, M, N, N_bar, fix_intercept = T, new_seperator)
+    step2 <- irwls(CHI2, L2, update_x = L2, weights, intercept = step1$intercept, M, N, N_bar, fix_intercept = T, seperator_new)
     h2 <- step2$h2
     intercept <- step1$intercept
   } else {
