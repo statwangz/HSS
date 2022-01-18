@@ -40,7 +40,6 @@ w_hm3.snplist <- readr::read_delim("w_hm3.snplist.bz2",  "\t",
                                    escape_double = F, trim_ws = T, progress = T)
 # load MHC region SNPs, CHR = 6 & BP > 28000000 & BP < 34000000
 load("snps_mhc.rda")
-
 # format BMI summary statistics data
 BMI_sumstats <- format_sumstats(file_sumstats,
                                 snps_merge = w_hm3.snplist,
