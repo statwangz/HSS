@@ -44,7 +44,7 @@ est_para <- function(dat, M,
     N_s1 <- N[idx_step1]
     x_s1 <- x[idx_step1]
     seperator <- floor(seq(from = 1, to = length(idx_step1), length.out = (n_blocks + 1)))
-    step1 <- irwls(CHi2_s1, L2_s1, update_x = x_s1, weights_s1, intercept = 1, M, N_s1, N_bar, fix_intercept, seperator)
+    step1 <- irwls(CHI2_s1, L2_s1, update_x = x_s1, weights_s1, intercept = 1, M, N_s1, N_bar, fix_intercept, seperator)
 
     # step 2
     seperator_new <- idx_step1[seperator]
