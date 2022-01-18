@@ -63,6 +63,16 @@ head(ldsc, n = 5)
 # LD score regression
 res_ldsc <- ldsc_fit(BMI_sumstats, ldsc)
 message("The estimate of heritability is ", round(res_ldsc$h2, 3), ".")
+
+# format reference data
+file_ref <- "1000G.EUR.QC.hm3.ind"
+xpass_data <- format_ref(file_ref, BMI_sumstats)
+z <- xpass_data$z
+X <- xpass_data$X
+
+# XPASS
+K <- X%*%t(X)
+h2 <- xpass(pull(z, Z), K, pull(z, N))
 ```
 
 ## Development

@@ -25,8 +25,8 @@ format_ref <- function(file_ref, sumstats) {
   sumstats <- semi_join(sumstats, ref_X, by = "SNP")
   message("Merge the summary statistics data with reference data..., remaining ", nrow(sumstats), " SNPs.")
 
-  z <- select(sumstats, Z)
-  ref_X <- select(ref_X, -SNP)
+  z <- select(sumstats, Z, N)
+  X <- select(ref_X, -SNP)
 
-  return(xpass_data = list(z, ref_X))
+  return(xpass_data = list(z, X))
 }
