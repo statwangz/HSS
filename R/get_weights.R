@@ -9,9 +9,7 @@ get_weights <- function(h2, intercept, L2, N, M, x) {
   })
   c <- N * h2 / M
   het_w <- 1 / (2 * (intercept + c * ld)^2)
-  # cat("mean het_w ", mean(het_w),"\n")
   oc_w <- 1 / wld
-  # cat("mean oc_w ", mean(oc_w), "\n")
   w <- sqrt(het_w * oc_w)
   return(w)
 }

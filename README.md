@@ -61,7 +61,8 @@ ldsc <- format_ldsc(file_ldsc)
 head(ldsc, n = 5)
 
 # LD score regression
-ldsc_fit(BMI_sumstats, ldsc)
+res_ldsc <- ldsc_fit(BMI_sumstats, ldsc)
+message("The estimate of heritability is ", round(res_ldsc$h2, 3), ".")
 ```
 
 ## Development
