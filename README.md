@@ -25,25 +25,43 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 # Download data
-
 # Download BMI summary statistics from https://atlas.ctglab.nl/
-
 # Download HapMap 3 data from Broad Institute
 # wget https://data.broadinstitute.org/alkesgroup/LDSCORE/eur_w_ld_chr.tar.bz2
-
 # Download LD score data from Broad Institute
 # wget https://data.broadinstitute.org/alkesgroup/LDSCORE/w_hm3.snplist.bz2
 
 library(HSS)
-#> Loading required package: tidyverse
-#> ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-#> ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-#> ✓ tibble  3.1.6     ✓ dplyr   1.0.7
-#> ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-#> ✓ readr   2.1.1     ✓ forcats 0.5.1
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> x dplyr::filter() masks stats::filter()
-#> x dplyr::lag()    masks stats::lag()
+
+file_sumstats <- "f.23104.0.0_res.EUR.sumstats.MACfilt.txt"
+# read in HapMap 3 data
+w_hm3.snplist <- readr::read_delim("w_hm3.snplist.bz2",  "\t",
+                                   escape_double = F, trim_ws = T, progress = T)
+# load MHC region SNPs, CHR = 6 & BP > 28000000 & BP < 34000000
+load("snps_mhc.rda")
+
+# format BMI summary statistics data
+BMI_sumstats <- format_sumstats(file_sumstats,
+                                snps_merge = w_hm3.snplist,
+                                snps_mhc = snps_mhc,
+                                snp_col = "SNPID_UKB",
+                                beta_col = "BETA",
+                                se_col = "SE",
+                                freq_col = "MAF_UKB",
+                                a1_col = "A1",
+                                a2_col = "A2",
+                                p_col = "P",
+                                n_col = "NMISS",
+                                info_col = "INFO_UKB")
+head(BMI_sumstats, n = 5)
+
+# format LD score data
+file_ldsc <- "eur_w_ld_chr"
+ldsc <- format_ldsc(file_ldsc)
+head(ldsc, n = 5)
+
+# LD score regression
+ldsc_fit(BMI_sumstats, ldsc)
 ```
 
 ## Development
