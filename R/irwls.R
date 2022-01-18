@@ -89,5 +89,5 @@ irwls <- function(y, L2, update_x, weights, intercept = 1,
     h2_est <- reg[1] / N_bar * M
   }
 
-  return(list(h2 = h2.est, intercept = intercept.est))
+  return(list(h2 = h2_est, intercept = intercept_est))
 }
