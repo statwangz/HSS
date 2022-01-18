@@ -1,12 +1,12 @@
-#' Fit LD score regression
+#' Fit LD score regression.
 #'
-#' @param sumstats summary statistcs data
+#' @param sumstats summary statistics data
 #' @param ldsc LD score data
 #' @param two_step logical
 #' @param fix_intercept logical
 #' @param n_blocks numeric
 #'
-#' @return LD score
+#' @return results of LD score regression
 #' @export
 #'
 ldsc_fit <- function(sumstats, ldsc,

@@ -2,12 +2,12 @@
 % Please edit documentation in R/ldsc_fit.R
 \name{ldsc_fit}
 \alias{ldsc_fit}
-\title{Fit LD score regression}
+\title{Fit LD score regression.}
 \usage{
 ldsc_fit(sumstats, ldsc, two_step = T, fix_intercept = F, n_blocks = 200)
 }
 \arguments{
-\item{sumstats}{summary statistcs data}
+\item{sumstats}{summary statistics data}
 
 \item{ldsc}{LD score data}
 
@@ -18,8 +18,8 @@ ldsc_fit(sumstats, ldsc, two_step = T, fix_intercept = F, n_blocks = 200)
 \item{n_blocks}{numeric}
 }
 \value{
-LD score
+results of LD score regression
 }
 \description{
-Fit LD score regression
+Fit LD score regression.
 }
