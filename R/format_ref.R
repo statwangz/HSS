@@ -18,7 +18,7 @@ format_ref <- function(file_ref, sumstats) {
   # merge the reference data
   ref_X <- bind_cols(SNP = rownames(ref$X), as_tibble(ref$X)) %>%
     drop_na() %>%
-    semi_join(sumstats, sumstats)
+    semi_join(sumstats, sumstats, by = "SNP")
   message("Remove missing data and merge the reference data with summary statistics data..., remaining ", nrow(ref_X), " SNPs.")
 
   # merge the summary statistics data with reference data
@@ -28,5 +28,5 @@ format_ref <- function(file_ref, sumstats) {
   z <- select(sumstats, Z)
   ref_X <- select(ref_X, -SNP)
 
-  return(xpass_data <- list(z, ref_X))
+  return(xpass_data = list(z, ref_X))
 }
