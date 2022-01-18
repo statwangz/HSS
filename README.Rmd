@@ -83,6 +83,7 @@ X <- xpass_data$X
 # XPASS
 K <- X%*%t(X)
 h2 <- xpass(pull(z, Z), K, pull(z, N))
+message("The estimate of heritability is ", round(h2, 3), ".")
 ```
 
 ## Development
