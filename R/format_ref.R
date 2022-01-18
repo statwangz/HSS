@@ -27,7 +27,6 @@ format_ref <- function(file_ref, sumstats) {
 
   z <- select(sumstats, Z, N)
   X <- select(ref_X, -SNP)
-  xpass_data <- list(z = z, X = X)
 
-  return(xpass_data)
+  return(xpass_data = list(z = z, X = X))
 }
