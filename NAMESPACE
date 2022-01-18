@@ -2,5 +2,7 @@
 
 export(est_para)
 export(format_ldsc)
+export(format_ref)
 export(format_sumstats)
 export(ldsc_fit)
+export(xpass)

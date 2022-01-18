@@ -32,8 +32,8 @@ est_para <- function(dat, M,
   N_bar <- mean(N)
   x <- L2 * N / N_bar
 
-  if(fix_intercept){
-    two_step = F
+  if (fix_intercept) {
+    two_step <- F
   }
   if (two_step) {
     # Two step estimator
