@@ -12,5 +12,7 @@ RoxygenNote: 7.1.2
 Depends: 
     genio,
     R (>= 2.10),
+    Rcpp,
+    RcppArmadillo,
     tidyverse
 LazyData: true
