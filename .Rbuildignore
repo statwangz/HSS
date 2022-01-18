@@ -1,2 +1,5 @@
+^renv$
+^renv\.lock$
 ^HSS\.Rproj$
 ^\.Rproj\.user$
+^README\.Rmd$
