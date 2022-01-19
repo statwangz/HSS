@@ -21,7 +21,7 @@ devtools::install_github("statwangz/HSS")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Here is a basic example:
 
 ``` r
 # Download data
@@ -39,7 +39,7 @@ file_sumstats <- "f.23104.0.0_res.EUR.sumstats.MACfilt.txt"
 w_hm3.snplist <- readr::read_delim("w_hm3.snplist.bz2",  "\t",
                                    escape_double = F, trim_ws = T, progress = T)
 # load MHC region SNPs, CHR = 6 & BP > 28000000 & BP < 34000000
-load("snps_mhc.rda")
+data(snps_mhc)
 # format BMI summary statistics data
 BMI_sumstats <- format_sumstats(file_sumstats,
                                 snps_merge = w_hm3.snplist,
