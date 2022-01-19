@@ -26,7 +26,7 @@ format_ref <- function(file_ref, sumstats) {
   message("Merge the summary statistics data with reference data..., remaining ", nrow(sumstats), " SNPs.")
 
   z <- select(sumstats, Z, N)
-  X <- select(ref_X, -SNP)
+  X <- t(as.matrix(select(ref_X, -SNP)))
 
   return(xpass_data = list(z = z, X = X))
 }
