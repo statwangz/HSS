@@ -1,5 +1,5 @@
 Package: HSS
-Title: Estimate heritability only using summary statistics data.
+Title: Estimate heritability using summary statistics data
 Version: 0.0.0.9000
 Authors@R: 
     person("Zhiwei", "Wang", , "zhiwei.wang@connect.ust.hk", role = c("aut", "cre"),
@@ -12,5 +12,5 @@ RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10),
     tidyverse,
-    genio,
+    genio
 LazyData: true
