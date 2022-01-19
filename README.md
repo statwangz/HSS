@@ -71,9 +71,7 @@ z <- xpass_data$z
 X <- xpass_data$X
 
 # XPASS
-X <- scale(X) / sqrt(ncol(X))
-K <- X %*% t(X)
-h2 <- xpass(pull(z, Z), K, pull(z, N))
+h2 <- xpass(z = pull(z, Z), K = K, n = pull(z, N))
 message("The estimate of heritability is ", round(h2, 3), ".")
 ```
 

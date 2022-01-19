@@ -1,6 +1,7 @@
 #' Estimate heritability using XPASS
 #'
 #' @param z z-score
+#' @param X reference genotypes matrix
 #' @param K Kinship matrix
 #' @param n sample size
 #' @param Z covariates
@@ -8,7 +9,16 @@
 #' @return heritability
 #' @export
 #'
-xpass <- function(z, K, n, Z = NULL) {
+xpass <- function(z, X = NULL, K = NULL, n, Z = NULL) {
+  if(is.null(X) & is.null(K)){
+    stop("please provide the information on reference genotypes data!")
+  }
+
+  if(is.null(K)){
+    X <- scale(X) / sqrt(ncol(X))
+    K <- X %*% t(X)
+  }
+
   m <- nrow(K)
   p <- length(z)
 
