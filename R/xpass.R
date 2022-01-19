@@ -10,11 +10,11 @@
 #' @export
 #'
 xpass <- function(z, X = NULL, K = NULL, n, Z = NULL) {
-  if(is.null(X) & is.null(K)){
+  if (is.null(X) & is.null(K)) {
     stop("please provide the information on reference genotypes data!")
   }
 
-  if(is.null(K)){
+  if (is.null(K)) {
     X <- scale(X) / sqrt(ncol(X))
     K <- X %*% t(X)
   }

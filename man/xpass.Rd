@@ -4,10 +4,12 @@
 \alias{xpass}
 \title{Estimate heritability using XPASS}
 \usage{
-xpass(z, K, n, Z = NULL)
+xpass(z, X = NULL, K = NULL, n, Z = NULL)
 }
 \arguments{
 \item{z}{z-score}
+
+\item{X}{reference genotypes matrix}
 
 \item{K}{Kinship matrix}
 
