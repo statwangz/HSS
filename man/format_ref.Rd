@@ -4,12 +4,14 @@
 \alias{format_ref}
 \title{Format the reference data.}
 \usage{
-format_ref(file_ref, sumstats)
+format_ref(file_ref, sumstats, group = NULL)
 }
 \arguments{
 \item{file_ref}{name of the reference data file}
 
 \item{sumstats}{summary statistics data}
+
+\item{group}{LD block group}
 }
 \value{
 z-score and reference data

@@ -5,11 +5,12 @@
 #' @param K Kinship matrix
 #' @param n sample size
 #' @param Z covariates
+#' @param group LD block, compute standard error by Jackknife
 #'
 #' @return heritability
 #' @export
 #'
-xpass <- function(z, X = NULL, K = NULL, n, Z = NULL) {
+xpass <- function(z, X = NULL, K = NULL, n, Z = NULL, group = NULL) {
   if (is.null(X) & is.null(K)) {
     stop("please provide the information on reference genotypes data!")
   }

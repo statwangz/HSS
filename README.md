@@ -61,8 +61,7 @@ ldsc <- format_ldsc(file_ldsc)
 head(ldsc, n = 5)
 
 # LD score regression
-res_ldsc <- ldsc_fit(BMI_sumstats, ldsc)
-cat("The estimate of heritability is ", round(res_ldsc$h2, 2), ".\n", sep = "")
+ldsc_fit(BMI_sumstats, ldsc)
 
 # format reference data
 file_ref <- "1000G.EUR.QC.hm3.ind"
@@ -73,8 +72,7 @@ X <- scale(X) / sqrt(ncol(X))
 K <- X %*% t(X)
 
 # XPASS
-h2 <- xpass(z = pull(z, Z), K = K, n = pull(z, N))
-cat("The estimate of heritability is ", round(h2, 2), ".\n", sep = "")
+xpass(z = pull(z, Z), K = K, n = pull(z, N))
 ```
 
 Please see

@@ -4,7 +4,14 @@
 \alias{ldsc_fit}
 \title{Fit LD score regression.}
 \usage{
-ldsc_fit(sumstats, ldsc, two_step = T, fix_intercept = F, n_blocks = 200)
+ldsc_fit(
+  sumstats,
+  ldsc,
+  two_step = T,
+  fix_intercept = F,
+  n_blocks = 200,
+  jackknife = T
+)
 }
 \arguments{
 \item{sumstats}{summary statistics data}
@@ -16,6 +23,8 @@ ldsc_fit(sumstats, ldsc, two_step = T, fix_intercept = F, n_blocks = 200)
 \item{fix_intercept}{logical}
 
 \item{n_blocks}{numeric}
+
+\item{jackknife}{logical, whether to estimate the standard error}
 }
 \value{
 results of LD score regression

@@ -10,7 +10,8 @@ est_para(
   two_step = T,
   idx_step1 = NULL,
   fix_intercept = F,
-  n_blocks = 200
+  n_blocks = 200,
+  jackknife = T
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ est_para(
 \item{fix_intercept}{logical}
 
 \item{n_blocks}{numeric}
+
+\item{jackknife}{logical, whether to estimate the standard error}
 }
 \value{
 slope and intercept in LD score regression

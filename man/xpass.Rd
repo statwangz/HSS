@@ -4,7 +4,7 @@
 \alias{xpass}
 \title{Estimate heritability using XPASS}
 \usage{
-xpass(z, X = NULL, K = NULL, n, Z = NULL)
+xpass(z, X = NULL, K = NULL, n, Z = NULL, group = NULL)
 }
 \arguments{
 \item{z}{z-score}
@@ -16,6 +16,8 @@ xpass(z, X = NULL, K = NULL, n, Z = NULL)
 \item{n}{sample size}
 
 \item{Z}{covariates}
+
+\item{group}{LD block, compute standard error by Jackknife}
 }
 \value{
 heritability
