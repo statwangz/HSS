@@ -11,6 +11,8 @@
 #' @export
 #'
 xpass <- function(z, X = NULL, K = NULL, n, Z = NULL, group = NULL) {
+  message("Begin XPASS estimate...")
+
   if (is.null(X) & is.null(K)) {
     stop("please provide the information on reference genotypes data!")
   }
@@ -57,7 +59,7 @@ xpass <- function(z, X = NULL, K = NULL, n, Z = NULL, group = NULL) {
       tmp <- sum(zz[group == group_num[j]])
       c(tmp, sum(group == group_num[j]))
     })
-    c_jf <- (sum(zz) - zz_jf[1, ]) / (p - zz_jf[4, ])
+    c_jf <- (sum(zz) - zz_jf[1, ]) / (p - zz_jf[2, ])
     se <- var(c_jf) / S / S * (ngroup - 1)
   }
 
