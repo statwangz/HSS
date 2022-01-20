@@ -61,7 +61,7 @@ ldsc <- format_ldsc(file_ldsc)
 head(ldsc, n = 5)
 
 # LD score regression
-ldsc_fit(BMI_sumstats, ldsc)
+ldsc_fit(BMI_sumstats, ldsc)$h2
 
 # format reference data
 file_ref <- "1000G.EUR.QC.hm3.ind"
@@ -70,7 +70,7 @@ z <- xpass_data$z
 X <- xpass_data$X
 
 # XPASS
-xpass(z = pull(z, Z), X = X, n = pull(z, N))
+xpass(z = pull(z, Z), X = X, n = pull(z, N))$h2
 ```
 
 Please see
