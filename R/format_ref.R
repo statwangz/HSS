@@ -8,11 +8,10 @@
 #' @export
 #'
 format_ref <- function(X_ref, sumstats, group = NULL) {
-  message("Begin reading in reference data...")
-  ref <- genio::read_plink(file_ref)
   message("The reference data set has ", nrow(X_ref), " lines.")
 
   if (!is.null(group)) {
+    message("Group the SNPs in summary statistics data...")
     sumstats <- inner_join(sumstats, group, by = "SNP")
   }
 
