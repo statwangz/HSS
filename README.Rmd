@@ -78,11 +78,9 @@ file_ref <- "1000G.EUR.QC.hm3.ind"
 xpass_data <- format_ref(file_ref, BMI_sumstats)
 z <- xpass_data$z
 X <- xpass_data$X
-X <- scale(X) / sqrt(ncol(X))
-K <- X %*% t(X)
 
 # XPASS
-xpass(z = pull(z, Z), K = K, n = pull(z, N))
+xpass(z = pull(z, Z), X = X, n = pull(z, N))
 ```
 
 Please see [here](https://github.com/statwangz/HSS/tree/main/ten_traits_analysis) for more examples which analyze other traits.

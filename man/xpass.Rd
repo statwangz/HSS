@@ -17,10 +17,10 @@ xpass(z, X = NULL, K = NULL, n, Z = NULL, group = NULL)
 
 \item{Z}{covariates}
 
-\item{group}{LD block, compute standard error by Jackknife}
+\item{group}{compute standard error by LD block Jackknife}
 }
 \value{
-heritability
+heritability and standard error
 }
 \description{
 Estimate heritability using XPASS

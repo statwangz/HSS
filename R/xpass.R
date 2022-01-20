@@ -5,9 +5,9 @@
 #' @param K Kinship matrix
 #' @param n sample size
 #' @param Z covariates
-#' @param group LD block, compute standard error by Jackknife
+#' @param group compute standard error by LD block Jackknife
 #'
-#' @return heritability
+#' @return heritability and standard error
 #' @export
 #'
 xpass <- function(z, X = NULL, K = NULL, n, Z = NULL, group = NULL) {
@@ -46,5 +46,20 @@ xpass <- function(z, X = NULL, K = NULL, n, Z = NULL, group = NULL) {
 
   h2 <- c / S
 
-  return(h2)
+  if (is.null(group)) {
+    # compute standard error by Jackknife
+    c_jf <- (sum(zz) - zz) / (p - 1)
+    se <- var(c_jf) / S / S * (p - 1)
+  } else {
+    group_num <- unique(group)
+    ngroup <- length(group_num)
+    zz_jf <- sapply(1:ngroup, function(j) {
+      tmp <- sum(zz[group == group_num[j]])
+      c(tmp, sum(group == group_num[j]))
+    })
+    c_jf <- (sum(zz) - zz_jf[1, ]) / (p - zz_jf[4, ])
+    se <- var(c_jf) / S / S * (ngroup - 1)
+  }
+
+  return(list(h2 = h2, se = se))
 }
