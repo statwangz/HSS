@@ -4,10 +4,10 @@
 \alias{format_ref}
 \title{Format the reference data.}
 \usage{
-format_ref(file_ref, sumstats, group = NULL)
+format_ref(X_ref, sumstats, group = NULL)
 }
 \arguments{
-\item{file_ref}{name of the reference data file}
+\item{X_ref}{reference genotypes data}
 
 \item{sumstats}{summary statistics data}
 
