@@ -7,10 +7,6 @@
 #' @export
 #'
 format_ref <- function(file_ref, sumstats) {
-  if (is.null(file_sumstats)) {
-    stop("please provide the information on reference data!")
-  }
-
   message("Begin reading in reference data...")
   ref <- genio::read_plink(file_ref)
   message("The reference data set has ", nrow(ref$X), " lines.")
