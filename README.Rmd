@@ -79,6 +79,8 @@ file_ref <- "1000G.EUR.QC.hm3.ind"
 xpass_data <- format_ref(file_ref, BMI_sumstats)
 z <- xpass_data$z
 X <- xpass_data$X
+X <- scale(X) / sqrt(ncol(X))
+K <- X %*% t(X)
 
 # XPASS
 h2 <- xpass(z = pull(z, Z), K = K, n = pull(z, N))
