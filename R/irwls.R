@@ -81,7 +81,7 @@ irwls <- function(y, L2, update_x, weights, intercept = 1,
 
   reg <- solve(xtx) %*% xty
 
-  if (jknife) {
+  if (jackknife) {
     # perform jackknife
     delete_from <- seq(from = 1, to = p * n_blocks, by = p)
     delete_to <- seq(from = p, to = p * n_blocks, by = p)

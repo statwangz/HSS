@@ -57,7 +57,7 @@ est_para <- function(dat, M,
     h2 <- step2$h2
     intercept <- step1$intercept
 
-    if (jknife) {
+    if (jackknife) {
       ## cpmbine step 1 and step 2
       c <- sum(weights^2 * x) / sum(weights^2 * x^2)
 
