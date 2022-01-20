@@ -85,6 +85,8 @@ h2 <- xpass(z = pull(z, Z), K = K, n = pull(z, N))
 message("The estimate of heritability is ", round(h2, 3), ".")
 ```
 
+Please see [here](https://github.com/statwangz/HSS/tree/main/ten_traits_analysis) for more examples which analyze other traits.
+
 ## Development
 
 The HSS package is developed by Zhiwei Wang (zhiwei.wang@connect.ust.hk).
