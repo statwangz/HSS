@@ -6,8 +6,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of HSS is to estimate heritability only using summary
-statistics data.
+The R package `HSS` implements two methods `LD score regression` and
+`XPASS` to estimate heritability only using summary statistics data.
 
 ## Installation
 
@@ -62,7 +62,7 @@ head(ldsc, n = 5)
 
 # LD score regression
 res_ldsc <- ldsc_fit(BMI_sumstats, ldsc)
-message("The estimate of heritability is ", round(res_ldsc$h2, 3), ".")
+cat("The estimate of heritability is ", round(res_ldsc$h2, 2), ".\n", sep = "")
 
 # format reference data
 file_ref <- "1000G.EUR.QC.hm3.ind"
@@ -72,7 +72,7 @@ X <- xpass_data$X
 
 # XPASS
 h2 <- xpass(z = pull(z, Z), K = K, n = pull(z, N))
-message("The estimate of heritability is ", round(h2, 3), ".")
+cat("The estimate of heritability is ", round(h2, 2), ".\n", sep = "")
 ```
 
 Please see
@@ -81,7 +81,7 @@ for more examples which analyze other traits.
 
 ## Development
 
-The HSS package is developed by Zhiwei Wang
+The `HSS` package is developed by Zhiwei Wang
 (<zhiwei.wang@connect.ust.hk>).
 
 ## Contact information
@@ -97,13 +97,13 @@ regression distinguishes confounding from polygenicity in genome-wide
 association studies. Nat Genet 47, 291–295.
 <https://doi.org/10.1038/ng.3211>
 
-Hu, X., Zhao, J., Lin, Z., Wang, Y., Peng, H., Zhao, H., Wan, X., Yang,
-C., 2021. MR-APSS: a unified approach to Mendelian Randomization
-accounting for pleiotropy and sample structure using genome-wide summary
-statistics. <https://doi.org/10.1101/2021.03.11.434915>
-
 Cai, M., Xiao, J., Zhang, S., Wan, X., Zhao, H., Chen, G., Yang, C.,
 2021. A unified framework for cross-population trait prediction by
 leveraging the genetic correlation of polygenic traits. The American
 Journal of Human Genetics 108, 632–655.
 <https://doi.org/10.1016/j.ajhg.2021.03.002>
+
+Hu, X., Zhao, J., Lin, Z., Wang, Y., Peng, H., Zhao, H., Wan, X., Yang,
+C., 2021. MR-APSS: a unified approach to Mendelian Randomization
+accounting for pleiotropy and sample structure using genome-wide summary
+statistics. <https://doi.org/10.1101/2021.03.11.434915>
