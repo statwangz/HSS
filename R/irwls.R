@@ -1,5 +1,5 @@
 irwls <- function(y, L2, update_x, weights, intercept = 1,
-                  M, N, N_bar, fix_intercept = T, seperator) {
+                  M, N, N_bar, fix_intercept = T, seperator, jackknife = T) {
 
   # calculate new weights
   weights <- weights / sum(weights)
@@ -73,21 +73,72 @@ irwls <- function(y, L2, update_x, weights, intercept = 1,
   xtx <- matrix(data = NA, nrow = p, ncol = p)
   colnames(xtx) <- colnames(wLD)
 
+
+
   for (i in 1:p) {
     xtx[i, ] <- t(colSums(as.matrix(xtx_block_values[seq(from = i, to = p * n_blocks, by = p), ])))
   }
 
   reg <- solve(xtx) %*% xty
 
-  if (p == 1) {
-    intercept_est <- intercept
-    h2_est <- reg[1] / N_bar * M
-  }
+  if (jknife) {
+    # perform jackknife
+    delete_from <- seq(from = 1, to = p * n_blocks, by = p)
+    delete_to <- seq(from = p, to = p * n_blocks, by = p)
+    delete_values <- matrix(data = NA, nrow = n_blocks, ncol = p)
+    colnames(delete_values) <- colnames(wLD)
 
-  if (p == 2) {
-    intercept_est <- reg[2]
-    h2_est <- reg[1] / N_bar * M
-  }
+    for (i in 1:n_blocks) {
+      xty_delete <- xty - xty_block_values[i, ]
+      xtx_delete <- xtx - xtx_block_values[delete_from[i]:delete_to[i], ]
+      delete_values[i, ] <- solve(xtx_delete) %*% xty_delete
+    }
 
-  return(list(h2 = h2_est, intercept = intercept_est))
+    delete_values <- as.matrix(delete_values[, 1:p])
+
+    pseudo_values <- matrix(data = NA, nrow = n_blocks, ncol = p)
+    colnames(pseudo_values) <- colnames(wLD)
+
+    for (i in 1:n_blocks) {
+      pseudo_values[i, ] <- (n_blocks * reg) - ((n_blocks - 1) * delete_values[i, ])
+    }
+
+    jackknife_cov <- cov(pseudo_values) / n_blocks
+    jackknife_se <- sqrt(diag(jackknife_cov))
+
+    coef_cov <- jackknife_cov[1, 1] / (N_bar^2) * M^2
+    h2_se <- sqrt(coef_cov)
+
+    if (p == 1) {
+      intercept_est <- intercept
+      h2_est <- reg[1] / N_bar * M
+      intercept_se <- NA
+    }
+
+    if (p == 2) {
+      intercept_est <- reg[2]
+      h2_est <- reg[1] / N_bar * M
+      intercept_se <- jackknife_se[length(jackknife_se)]
+    }
+
+    return(list(
+      h2 = h2_est, h2_se = h2_se,
+      intercept = intercept_est,
+      intercept_se = intercept_se,
+      delete_values = delete_values,
+      jk_est = reg[1]
+    ))
+  } else {
+    if (p == 1) {
+      intercept_est <- intercept
+      h2_est <- reg[1] / N_bar * M
+    }
+
+    if (p == 2) {
+      intercept_est <- reg[2]
+      h2_est <- reg[1] / N_bar * M
+    }
+
+    return(list(h2 = h2_est, intercept = intercept_est))
+  }
 }

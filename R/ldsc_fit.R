@@ -5,6 +5,7 @@
 #' @param two_step logical
 #' @param fix_intercept logical
 #' @param n_blocks numeric
+#' @param jackknife logical, whether to estimate the standard error
 #'
 #' @return results of LD score regression
 #' @export
@@ -12,7 +13,8 @@
 ldsc_fit <- function(sumstats, ldsc,
                      two_step = T,
                      fix_intercept = F,
-                     n_blocks = 200) {
+                     n_blocks = 200,
+                     jackknife = T) {
   M <- nrow(ldsc) # number of SNPs included in the LD score estimation
 
   merged_data <- inner_join(sumstats, ldsc, by = "SNP")
@@ -27,12 +29,15 @@ ldsc_fit <- function(sumstats, ldsc,
 
   # estimate heritability
   message("Begin LD score regression...")
-  est_para <- est_para(
+  h2_se <- est_para(
     dat = select(merged_data, SNP, CHI2, N, L2),
     M = M,
     two_step = two_step,
     idx_step1 = idx_step1,
     fix_intercept = fix_intercept,
-    n_blocks = n_blocks
+    n_blocks = n_blocks,
+    jackknife = jackknife
   )
+
+  return(h2_se)
 }
