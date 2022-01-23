@@ -60,7 +60,7 @@ xpass <- function(z, X = NULL, K = NULL, n, Z = NULL, group = NULL) {
       c(tmp, sum(group == group_num[j]))
     })
     c_jf <- (sum(zz) - zz_jf[1, ]) / (p - zz_jf[2, ])
-    se <- var(c_jf) / S / S * (ngroup - 1)
+    se <- sqrt(var(c_jf) / S / S * (ngroup - 1))
   }
 
   return(list(h2 = h2, se = se))
