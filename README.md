@@ -85,7 +85,7 @@ The `HSS` package is developed by Zhiwei Wang
 ## Contact information
 
 Please feel free to contact Zhiwei Wang (<zhiwei.wang@connect.ust.hk>)
-if any enquiry.
+if any inquiries.
 
 ## References
 
