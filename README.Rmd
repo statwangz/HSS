@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 # HSS
 
 <!-- badges: start -->
+![GitHub repo size](https://img.shields.io/github/repo-size/statwangz/HSS)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fstatwangz%2FHSS&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+![GitHub Repo stars](https://img.shields.io/github/stars/statwangz/HSS)
 <!-- badges: end -->
 
 The R package `HSS` implements two methods `LD score regression` and `XPASS` to estimate heritability only using summary statistics data.
