@@ -24,7 +24,7 @@
 #' @return formatted summary statistics data
 #' @export
 #'
-format_sumstats <- function(file_sumstats,
+format_sumstats <- function(file_sumstats, delim = NULL,
                             snps_merge = w_hm3.snplist,
                             snps_mhc = snps_mhc,
                             snp_col = "SNP",
@@ -49,7 +49,8 @@ format_sumstats <- function(file_sumstats,
   }
 
   message("Begin reading in summary statistics data...")
-  sumstats <- readr::read_delim(file_sumstats, "\t",
+  sumstats <- readr::read_delim(
+    file_sumstats, delim = delim,
     escape_double = F, trim_ws = T, progress = T
   )
 
@@ -85,7 +86,7 @@ format_sumstats <- function(file_sumstats,
   # check sample size n
   if (ncase_col %in% names(sumstats)) {
     names(sumstats)[which(names(sumstats) == ncase_col)[1]] <- "N_CASE"
-    if (!is.numeric(sumstats$ncase)) {
+    if (!is.numeric(sumstats$N_CASE)) {
       message("n_case column is not numeric data. Coercing...")
       sumstats$N_CASE <- as.numeric(as.character(sumstats$N_CASE))
     }
