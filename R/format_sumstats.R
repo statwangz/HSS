@@ -41,7 +41,7 @@ format_sumstats <- function(file_sumstats, delim = NULL,
                             n = NULL,
                             z_col = "Z",
                             info_col = "INFO",
-                            log_pval = F,
+                            log_pval = FALSE,
                             chi2_max = NULL,
                             min_freq = 0.05) {
   if (is.null(file_sumstats)) {
@@ -50,14 +50,20 @@ format_sumstats <- function(file_sumstats, delim = NULL,
 
   message("Begin reading in summary statistics data...")
   sumstats <- readr::read_delim(
-    file_sumstats, delim = delim,
-    escape_double = F, trim_ws = T, progress = T
+    file_sumstats,
+    delim = delim, comment = "##",
+    escape_double = FALSE, trim_ws = TRUE, progress = TRUE
   )
 
   message("Begin formatting...")
   message("The raw data set has ", nrow(sumstats), " lines.")
 
-  cols <- c(snp_col, beta_col, or_col, se_col, freq_col, a1_col, a2_col, p_col, ncase_col, ncontrol_col, n_col, z_col, info_col)
+  cols <- c(
+    snp_col, beta_col, or_col, se_col,
+    freq_col, a1_col, a2_col, p_col,
+    ncase_col, ncontrol_col, n_col,
+    z_col, info_col
+  )
   cols <- names(sumstats)[names(sumstats) %in% cols]
   out <- c("SNP", "A1", "A2", "Z", "N", "CHI2", "P")
 
@@ -74,12 +80,15 @@ format_sumstats <- function(file_sumstats, delim = NULL,
   }
 
   # check signed statistics
-  if ((!beta_col %in% names(sumstats)) & (!or_col %in% names(sumstats)) & (!z_col %in% names(sumstats))) {
+  if ((!beta_col %in% names(sumstats)) &
+      (!or_col %in% names(sumstats)) &
+      (!z_col %in% names(sumstats))) {
     stop("Signed statistics not found!")
   }
 
   # check sample size n
-  if ((!n_col %in% names(sumstats)) & (!(ncase_col %in% names(sumstats) & ncontrol_col %in% names(sumstats))) & is.null(n)) {
+  if ((!n_col %in% names(sumstats)) & is.null(n) &
+      (!(ncase_col %in% names(sumstats) & ncontrol_col %in% names(sumstats)))) {
     stop("information for sample size not found!")
   }
 
@@ -113,33 +122,40 @@ format_sumstats <- function(file_sumstats, delim = NULL,
     message("Generate sample size from specified sample size.")
     sumstats$N <- n
   }
+  sumstats$N <- as.integer(sumstats$N)
 
   # Remove NAs
   names(sumstats)[which(names(sumstats) == snp_col)[1]] <- "SNP"
   sumstats$SNP <- tolower(sumstats$SNP)
   sumstats$SNP <- gsub("[[:space:]]", "", sumstats$SNP)
-  sumstats <- drop_na(sumstats, SNP)
+  sumstats <- tidyr::drop_na(sumstats, SNP)
   message("Remove missing data..., remaining ", nrow(sumstats), " SNPs.")
 
   # merge with HapMap 3 SNPs lists
   if (!is.null(snps_merge)) {
-    snps_merge <- select(snps_merge, SNP, A1, A2)
+    snps_merge <- dplyr::select(snps_merge, SNP, A1, A2)
     names(snps_merge) <- c("SNP", "ref_A1", "ref_A2")
-    sumstats <- inner_join(sumstats, snps_merge, by = "SNP")
-    message("Merge the data with the HapMap 3 SNPs list by SNP..., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::inner_join(sumstats, snps_merge, by = "SNP")
+    message(
+      "Merge the data with the HapMap 3 SNPs list by SNP..., remaining ",
+      nrow(sumstats), " SNPs."
+    )
   }
 
   # remove MHC SNPs
   if (!is.null(snps_mhc)) {
-    sumstats <- filter(sumstats, !SNP %in% snps_mhc)
-    message("Remove SNPs in MHC region..., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::filter(sumstats, !SNP %in% snps_mhc)
+    message("Remove the SNPs in MHC region..., remaining ", nrow(sumstats), " SNPs.")
   }
 
   # check imputation INFO
   if (info_col %in% names(sumstats)) {
     names(sumstats)[which(names(sumstats) == info_col)[1]] <- "INFO"
-    sumstats <- filter(sumstats, INFO > 0.9 | is.na(INFO))
-    message("Remove SNPs with imputation INFO less than 0.9 (keeping NAs)..., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::filter(sumstats, INFO > 0.9 | is.na(INFO))
+    message(
+      "Remove the SNPs with imputation INFO less than 0.9 (keeping NAs)..., remaining ",
+      nrow(sumstats), " SNPs."
+    )
   }
 
   # check effect allele (A1)
@@ -157,9 +173,14 @@ format_sumstats <- function(file_sumstats, delim = NULL,
 
     sumstats$A1 <- toupper(sumstats$A1)
 
-    sumstats <- filter(sumstats, grepl("^[ACTG]+$", A1))
-    message("Remove the SNPs whose effect allele has the value that is not A/C/T/G...., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::filter(sumstats, grepl("^[ACTG]+$", A1))
+    message(
+      "Remove the SNPs whose effect allele has the value that is not A/C/T/G...., remaining ",
+      nrow(sumstats), " SNPs."
+    )
   }
+
+  # return(sumstats)
 
   # check the other allele (A2)
   if (a2_col %in% names(sumstats)) {
@@ -176,13 +197,16 @@ format_sumstats <- function(file_sumstats, delim = NULL,
 
     sumstats$A2 <- toupper(sumstats$A2)
 
-    sumstats <- filter(sumstats, grepl("^[ACTG]+$", A2))
-    message("Remove the SNPs whose non effect allele has the value that is not A/C/T/G...., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::filter(sumstats, grepl("^[ACTG]+$", A2))
+    message(
+      "Remove the SNPs whose non effect allele has the value that is not A/C/T/G...., remaining ",
+      nrow(sumstats), " SNPs."
+    )
   }
 
   # remove ambiguous SNPs
   # A-T, C-G
-  sumstats <- filter(
+  sumstats <- dplyr::filter(
     sumstats,
     (A1 == "A" & A2 == "C") |
       (A1 == "A" & A2 == "G") |
@@ -193,11 +217,11 @@ format_sumstats <- function(file_sumstats, delim = NULL,
       (A1 == "G" & A2 == "A") |
       (A1 == "G" & A2 == "T")
   )
-  message("Remove ambiguous SNPs..., remaining ", nrow(sumstats), " SNPs.")
+  message("Remove the ambiguous SNPs..., remaining ", nrow(sumstats), " SNPs.")
 
   # duplicated SNPs
-  sumstats <- distinct(sumstats, SNP, .keep_all = T)
-  message("Remove duplicated SNPs..., remaining ", nrow(sumstats), " SNPs.")
+  sumstats <- dplyr::distinct(sumstats, SNP, .keep_all = TRUE)
+  message("Remove the duplicated SNPs..., remaining ", nrow(sumstats), " SNPs.")
 
   # check estimate of effect size (BETA) and standard error (SE)
   if (beta_col %in% names(sumstats)) {
@@ -208,7 +232,7 @@ format_sumstats <- function(file_sumstats, delim = NULL,
       sumstats$BETA <- as.numeric(as.character(sumstats$BETA))
     }
 
-    sumstats <- filter(sumstats, is.finite(BETA))
+    sumstats <- dplyr::filter(sumstats, is.finite(BETA))
 
     # check se
     if (se_col %in% names(sumstats)) {
@@ -219,7 +243,7 @@ format_sumstats <- function(file_sumstats, delim = NULL,
         sumstats$SE <- as.numeric(as.character(sumstats$SE))
       }
 
-      sumstats <- filter(sumstats, is.finite(SE) & SE > 0)
+      sumstats <- dplyr::filter(sumstats, is.finite(SE) & SE > 0)
     }
   }
 
@@ -239,7 +263,7 @@ format_sumstats <- function(file_sumstats, delim = NULL,
         sumstats$SE <- as.numeric(as.character(sumstats$SE))
       }
 
-      sumstats <- filter(sumstats, is.finite(SE) & SE > 0)
+      sumstats <- dplyr::filter(sumstats, is.finite(SE) & SE > 0)
     }
   }
 
@@ -252,8 +276,11 @@ format_sumstats <- function(file_sumstats, delim = NULL,
     }
 
     # remove SNP with allele frequency less than min_freq
-    sumstats <- filter(sumstats, (FREQ > min_freq & FREQ < (1 - min_freq)) | is.na(FREQ))
-    message("Remove SNPs with allele frequency less than min_freq (keeping NAs)..., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::filter(sumstats, (FREQ > min_freq & FREQ < (1 - min_freq)) | is.na(FREQ))
+    message(
+      "Remove the SNPs with allele frequency less than min_freq (keeping NAs)..., remaining ",
+      nrow(sumstats), " SNPs."
+    )
   }
 
   # check p-value
@@ -274,8 +301,11 @@ format_sumstats <- function(file_sumstats, delim = NULL,
       sumstats$P <- as.numeric(sumstats$P)
     }
 
-    sumstats <- filter(sumstats, P >= 0 & P <= 1)
-    message("Remove SNPs with p-value < 0 or p-value > 1..., remaining ", nrow(sumstats), " SNPs.")
+    sumstats <- dplyr::filter(sumstats, P >= 0 & P <= 1)
+    message(
+      "Remove the SNPs with p-value < 0 or p-value > 1..., remaining ",
+      nrow(sumstats), " SNPs."
+    )
   }
 
   # check z-score
@@ -294,12 +324,13 @@ format_sumstats <- function(file_sumstats, delim = NULL,
   # calculate z-score from p-value
   if ((!"Z" %in% names(sumstats)) & "P" %in% names(sumstats) & "BETA" %in% names(sumstats)) {
     message("Infer z-score from p-value and effect size.")
-    sumstats$CHI2 <- qchisq(sumstats$P, 1, lower.tail = F)
+    sumstats$CHI2 <- qchisq(sumstats$P, 1, lower.tail = FALSE)
     sumstats$Z <- sign(sumstats$BETA) * sqrt(sumstats$CHI2)
   }
 
   # calculate z-score if no Z, but with BETA and SE
-  if ((!"Z" %in% names(sumstats)) & ("BETA" %in% names(sumstats) & "SE" %in% names(sumstats))) {
+  if ((!"Z" %in% names(sumstats)) &
+      ("BETA" %in% names(sumstats) & "SE" %in% names(sumstats))) {
     message("Infer z-score from effect size and standard error.")
     sumstats$Z <- sumstats$BETA / sumstats$SE
     sumstats$CHI2 <- (sumstats$Z)^2
@@ -312,7 +343,7 @@ format_sumstats <- function(file_sumstats, delim = NULL,
 
   # calculate p-value if no P
   if (!"P" %in% names(sumstats)) {
-    sumstats$P <- pchisq(sumstats$CHI2, 1, lower.tail = F)
+    sumstats$P <- pchisq(sumstats$CHI2, 1, lower.tail = FALSE)
   }
 
   if (!"Z" %in% names(sumstats)) {
@@ -320,20 +351,26 @@ format_sumstats <- function(file_sumstats, delim = NULL,
   }
 
   # check missing data
-  sumstats <- select(sumstats, one_of(out))
-  sumstats <- drop_na(sumstats)
+  sumstats <- dplyr::select(sumstats, dplyr::one_of(out))
+  sumstats <- tidyr::drop_na(sumstats)
   message("Remove missing values..., remaining ", nrow(sumstats), " SNPs.")
 
   n_min <- mean(sumstats$N) - 5 * sd(sumstats$N)
   n_max <- mean(sumstats$N) + 5 * sd(sumstats$N)
-  sumstats <- filter(sumstats, N >= n_min & N <= n_max)
-  message("Remove SNPs with sample size 5 standard deviations away from the mean..., remaining ", nrow(sumstats), " SNPs.")
+  sumstats <- dplyr::filter(sumstats, N >= n_min & N <= n_max)
+  message(
+    "Remove SNPs with sample size 5 standard deviations away from the mean..., remaining ",
+    nrow(sumstats), " SNPs."
+  )
 
   if (is.null(chi2_max)) {
     chi2_max <- max(c(80, median(sumstats$N) / 1000))
   }
-  sumstats <- filter(sumstats, CHI2 < chi2_max)
-  message("Remove SNPs with chi-square > chi2_max..., remaining ", nrow(sumstats), " SNPs.")
+  sumstats <- dplyr::filter(sumstats, CHI2 < chi2_max)
+  message(
+    "Remove SNPs with chi-square > chi2_max..., remaining ",
+    nrow(sumstats), " SNPs."
+  )
 
   message("The formatted data has ", nrow(sumstats), " lines.")
 
